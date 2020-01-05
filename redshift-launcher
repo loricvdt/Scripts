@@ -1,0 +1,11 @@
+#!/bin/bash
+# Turns on or off redshift at a certain temperature
+# Usage: redshift-launcher temperature
+# See redshift -h to get more information
+
+if pidof redshift > /dev/null
+then
+	pkill redshift
+else
+	redshift -t $1:$1 -l 0:0 > /dev/null 2>&1 &
+fi
