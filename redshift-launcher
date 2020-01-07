@@ -3,6 +3,14 @@
 # Usage: redshift-launcher temperature
 # See redshift -h to get more information
 
+if [ "$1" = "-h" ] || [ "$1" = "--help" ] || [ "$1" = "" ]
+then
+        echo -e Usage: redshift-launcher $(tput sitm)[temperature]
+        echo -e $(tput sgr0)See redshift -h to get more information
+	exit
+fi
+
+
 if pidof redshift > /dev/null
 then
 	pkill redshift

@@ -1,0 +1,31 @@
+#!/bin/bash
+# Recreation of the add-apt-repository command (just adds the "deb https://REPO.URL/ ..." line to a file in the sources.list.d directory
+# Usage: add-apt-repository "deb https://REPO.URL/ ..."
+SOURCES_DIR="/etc/apt/sources.list.d/"
+
+if [ "$1" = "-h" ] || [ "$1" = "--help" ] || [ "$1" = "" ]
+then
+	echo -e Usage: add-apt-repository $(tput sitm)\"deb https://REPO.URL/ ...\"
+	exit
+fi
+
+if [ ! -w "$SOURCES_DIR" ]
+then
+	echo -e $(tput setaf 1)No write permission to "$SOURCES_DIR"
+	exit
+fi
+
+filename=$(echo $1 | grep -o "deb .*" | cut -d":" -f2 | cut -d" " -f1)
+filename=${filename#//}
+filename=${filename%/}
+filename=${filename%.*}
+filename=${filename##*.}.list
+
+filepath=${SOURCES_DIR}"$filename"
+if [ ! -e "$filepath" ]
+then
+	echo "$1" > "$filepath"
+	echo -e \"$(tput sitm)$1$(tput sgr0)\" added to $(tput bold)$(tput setaf 2)$filepath
+else
+	echo -e $(tput setaf 1)$(tput sitm)$filepath$(tput sgr0)$(tput bold)$(tput setaf 1) already exists
+fi
